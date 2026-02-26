@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil Proveedor - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:100px 20px 140px;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+}
+
+.back-btn{
+position:absolute;
+top:30px;
+left:20px;
+background:white;
+padding:10px 18px;
+border-radius:30px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+cursor:pointer;
+font-size:14px;
+color:#1A334A;
+text-decoration:none;
+}
+
+.profile{text-align:center;}
+
+.profile-img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:15px;
+}
+
+.stars{color:#977a29;margin-bottom:5px;}
+
+.icon-row{
+margin-top:10px;
+display:flex;
+justify-content:center;
+gap:25px;
+font-size:24px;
+align-items:center;
+}
+
+.favorite{
+cursor:pointer;
+color:#ccc;
+transition:0.3s;
+font-size:26px;
+}
+
+.favorite.active{color:red;}
+
+.save{
+cursor:pointer;
+width:26px;
+height:26px;
+fill:none;
+stroke:#ccc;
+stroke-width:2;
+transition:0.3s;
+}
+
+.save.active{
+fill:#1A334A;
+stroke:#1A334A;
+}
+
+.description{
+margin:25px auto;
+font-size:15px;
+line-height:1.7;
+max-width:500px;
+text-align:center;
+}
+
+.portfolio{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+margin:25px 0;
+}
+
+.portfolio img{
+width:100%;
+border-radius:18px;
+aspect-ratio:3/4;
+object-fit:cover;
+cursor:pointer;
+transition:0.3s;
+}
+
+.portfolio img:hover{transform:scale(1.05);}
+
+.review{
+background:white;
+padding:15px;
+border-radius:15px;
+margin:12px 0;
+text-align:left;
+font-size:14px;
+}
+
+.review strong{display:block;margin-bottom:4px;}
+
+.review-actions{
+margin-top:8px;
+display:flex;
+gap:15px;
+font-size:14px;
+}
+
+.review-actions span{
+cursor:pointer;
+}
+
+.buttons{margin-top:20px;}
+
+.message-btn,.add-review-btn{
+width:100%;
+padding:14px;
+border-radius:20px;
+border:none;
+background:#1A334A;
+color:white;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+.add-review-btn{
+background:white;
+color:#1A334A;
+border:1px solid #1A334A;
+}
+
+.report-btn{
+background:none;
+border:none;
+color:#c94c4c;
+cursor:pointer;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:1000;
+}
+
+.modal-content{
+background:white;
+padding:20px;
+border-radius:20px;
+width:90%;
+max-width:400px;
+text-align:center;
+position:relative;
+}
+
+.close-modal{
+position:absolute;
+top:12px;
+right:15px;
+font-size:18px;
+cursor:pointer;
+color:#1A334A;
+}
+
+.modal-content textarea,
+.modal-content select{
+width:100%;
+margin-top:10px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+resize:none;
+}
+
+.star-rating{
+font-size:26px;
+cursor:pointer;
+margin:10px 0;
+}
+
+.star-rating span{color:#ccc;}
+.star-rating span.active{color:#f4b400;}
+
+.image-viewer img{
+width:90%;
+max-height:80%;
+border-radius:20px;
+}
+
+.close-img{
+position:absolute;
+top:30px;
+right:30px;
+font-size:32px;
+color:white;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<a href="search-providers.html" class="back-btn">← Regresar</a>
+
+<div class="profile">
+
+<img class="profile-img" src="https://randomuser.me/api/portraits/men/32.jpg">
+
+<h2>DJ Marco</h2>
+<div class="stars">★★★★★ 4.9 (129 reseñas)</div>
+
+<div class="icon-row">
+<span class="favorite" id="favBtn">♥</span>
+
+<svg class="save" id="saveBtn" viewBox="0 0 24 24">
+<path d="M6 3h12v18l-6-4-6 4z"/>
+</svg>
+</div>
+
+<div class="description">
+DJ Marco cuenta con más de 8 años de experiencia en bodas y eventos privados.
+Ofrece iluminación profesional, efectos especiales y mezclas personalizadas
+creando experiencias únicas en cada celebración.
+</div>
+
+<h3>Portafolio</h3>
+
+<div class="portfolio">
+<img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30" onclick="openImage(this.src)">
+<img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439" onclick="openImage(this.src)">
+<img src="https://images.unsplash.com/photo-1506157786151-b8491531f063" onclick="openImage(this.src)">
+<img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3" onclick="openImage(this.src)">
+<img src="https://images.unsplash.com/photo-1521334884684-d80222895322" onclick="openImage(this.src)">
+<img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678" onclick="openImage(this.src)">
+</div>
+
+<h3>Reseñas</h3>
+<div id="reviewsContainer"></div>
+
+<div class="buttons">
+<button class="message-btn" onclick="location.href='messages.html'">Mandar mensaje</button>
+<button class="add-review-btn" onclick="openReviewModal()">Agregar / Editar mi reseña</button>
+<button class="report-btn" onclick="openReportModal()">Reportar proveedor</button>
+</div>
+
+</div>
+
+<!-- MODAL RESEÑA -->
+<div class="modal" id="reviewModal">
+<div class="modal-content">
+<h3>Mi Reseña</h3>
+<div class="star-rating" id="starRating"></div>
+<textarea id="reviewText" rows="4" placeholder="Escribe tu reseña..."></textarea>
+<br><br>
+<button onclick="saveReview()">Guardar</button>
+</div>
+</div>
+
+<!-- MODAL REPORTAR -->
+<div class="modal" id="reportModal">
+<div class="modal-content">
+
+<span class="close-modal" onclick="reportModal.style.display='none'">✕</span>
+
+<h3>Reportar proveedor</h3>
+
+<select id="reportReason">
+<option value="">Selecciona un motivo</option>
+<option>Mal servicio</option>
+<option>Información falsa</option>
+<option>Incumplimiento</option>
+<option>Contenido inapropiado</option>
+<option>Otro</option>
+</select>
+
+<textarea id="reportText" rows="4" placeholder="Describe tu queja..."></textarea>
+<br><br>
+<button onclick="submitReport()">Enviar reporte</button>
+</div>
+</div>
+
+<!-- MODAL IMAGEN -->
+<div class="modal image-viewer" id="imageModal">
+<span class="close-img" onclick="closeImage()">✕</span>
+<img id="bigImage">
+</div>
+
+<script>
+const favBtn=document.getElementById("favBtn");
+const saveBtn=document.getElementById("saveBtn");
+const reviewModal=document.getElementById("reviewModal");
+const reportModal=document.getElementById("reportModal");
+const starContainer=document.getElementById("starRating");
+const reviewText=document.getElementById("reviewText");
+const reviewsContainer=document.getElementById("reviewsContainer");
+
+let selectedStars=0;
+
+/* FAVORITOS Y GUARDAR */
+if(localStorage.getItem("favDJMarco")==="true") favBtn.classList.add("active");
+if(localStorage.getItem("saveDJMarco")==="true") saveBtn.classList.add("active");
+
+favBtn.onclick=function(){
+this.classList.toggle("active");
+localStorage.setItem("favDJMarco",this.classList.contains("active"));
+}
+
+saveBtn.onclick=function(){
+this.classList.toggle("active");
+localStorage.setItem("saveDJMarco",this.classList.contains("active"));
+}
+
+/* ESTRELLAS */
+function renderStars(){
+starContainer.innerHTML="";
+for(let i=1;i<=5;i++){
+let star=document.createElement("span");
+star.innerHTML="★";
+if(i<=selectedStars) star.classList.add("active");
+star.onclick=function(){selectedStars=i;renderStars();}
+starContainer.appendChild(star);
+}
+}
+renderStars();
+
+/* RESEÑAS */
+const defaultReviews=[
+{name:"Ana López",stars:5,text:"Increíble ambiente, lo volvería a contratar.",likes:0,dislikes:0},
+{name:"Carlos Méndez",stars:4,text:"Muy buen DJ, excelente iluminación.",likes:0,dislikes:0},
+{name:"Sofía Torres",stars:5,text:"Animó toda la boda, súper recomendado.",likes:0,dislikes:0}
+];
+
+function loadReview(){
+reviewsContainer.innerHTML="";
+
+defaultReviews.forEach((r,index)=>{
+reviewsContainer.innerHTML+=`
+<div class="review">
+<strong>${r.name}</strong>
+${"★".repeat(r.stars)}<br>
+${r.text}
+
+<div class="review-actions">
+<span onclick="likeReview(${index})">👍 ${r.likes}</span>
+<span onclick="dislikeReview(${index})">👎 ${r.dislikes}</span>
+</div>
+
+</div>`;
+});
+
+let text=localStorage.getItem("userReview");
+let stars=localStorage.getItem("userStars");
+
+if(text){
+reviewsContainer.innerHTML+=`
+<div class="review">
+<strong>Tú</strong>
+${"★".repeat(stars)}<br>
+${text}
+</div>`;
+}
+}
+
+function likeReview(i){
+defaultReviews[i].likes++;
+loadReview();
+}
+
+function dislikeReview(i){
+defaultReviews[i].dislikes++;
+loadReview();
+}
+
+function openReviewModal(){
+reviewModal.style.display="flex";
+reviewText.value=localStorage.getItem("userReview")||"";
+selectedStars=localStorage.getItem("userStars")||0;
+renderStars();
+}
+
+function saveReview(){
+localStorage.setItem("userReview",reviewText.value);
+localStorage.setItem("userStars",selectedStars);
+reviewModal.style.display="none";
+loadReview();
+}
+
+/* REPORTAR */
+function openReportModal(){reportModal.style.display="flex";}
+function submitReport(){
+let reason=document.getElementById("reportReason").value;
+if(!reason){alert("Selecciona un motivo");return;}
+alert("Reporte enviado correctamente");
+reportModal.style.display="none";
+}
+
+/* IMAGEN */
+function openImage(src){
+document.getElementById("bigImage").src=src;
+document.getElementById("imageModal").style.display="flex";
+}
+function closeImage(){
+document.getElementById("imageModal").style.display="none";
+}
+
+loadReview();
+
+window.onclick=function(e){
+if(e.target===reviewModal) reviewModal.style.display="none";
+if(e.target===reportModal) reportModal.style.display="none";
+if(e.target.id==="imageModal") closeImage();
+}
+</script>
+
+</body>
+</html>

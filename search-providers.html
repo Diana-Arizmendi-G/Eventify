@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proveedores - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:100px 20px 120px;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+}
+
+.back-btn{
+position:absolute;
+top:30px;
+left:20px;
+background:white;
+padding:10px 18px;
+border-radius:30px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+cursor:pointer;
+font-size:14px;
+color:#1A334A;
+text-decoration:none;
+}
+
+h1{margin-bottom:20px;}
+
+.search-box{
+width:100%;
+padding:14px;
+border-radius:30px;
+border:none;
+margin-bottom:20px;
+outline:none;
+}
+
+.tabs{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.tab{
+flex:1;
+text-align:center;
+padding:10px;
+cursor:pointer;
+border-bottom:2px solid transparent;
+}
+
+.tab.active{
+font-weight:600;
+border-bottom:2px solid #1A334A;
+}
+
+.provider-card{
+background:white;
+padding:18px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.06);
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.provider-card img{
+width:65px;
+height:65px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.provider-info h3{
+font-size:18px;
+margin-bottom:4px;
+}
+
+.provider-info p{
+font-size:13px;
+color:#6c9bb3;
+}
+
+.stars{
+color:#f4b400;
+font-size:14px;
+margin-top:4px;
+}
+
+.reviews{
+color:#6c9bb3;
+font-size:12px;
+margin-left:6px;
+}
+
+.actions{
+margin-left:auto;
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.view-btn{
+padding:8px 14px;
+border-radius:20px;
+border:1px solid #1A334A;
+background:transparent;
+cursor:pointer;
+font-family:'Bodoni Moda', serif;
+font-size:12px;
+}
+
+.icon-btn{
+cursor:pointer;
+font-size:20px;
+color:#ccc;
+}
+
+.icon-btn.heart.active{
+color:red;
+}
+
+.bookmark{
+width:16px;
+height:20px;
+border:2px solid #1A334A;
+border-radius:3px 3px 0 0;
+position:relative;
+cursor:pointer;
+}
+
+.bookmark::after{
+content:"";
+position:absolute;
+bottom:-2px;
+left:50%;
+transform:translateX(-50%);
+width:0;
+height:0;
+border-left:8px solid transparent;
+border-right:8px solid transparent;
+border-top:10px solid #1A334A;
+}
+
+.bookmark.active{
+background:#1A334A;
+}
+
+.bookmark.active::after{
+border-top:10px solid #1A334A;
+}
+
+.no-results{
+text-align:center;
+margin-top:40px;
+display:none;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.navbar a{
+text-decoration:none;
+color:#1A334A;
+font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="home-organizador.html" class="back-btn">← Regresar</a>
+
+<h1>Proveedores</h1>
+
+<input class="search-box" id="searchInput" placeholder="Buscar proveedor...">
+
+<div class="tabs">
+<div class="tab active" onclick="switchTab('recomendados', event)">⭐ Recomendados</div>
+<div class="tab" onclick="switchTab('favoritos', event)">❤️ Favoritos</div>
+<div class="tab" onclick="switchTab('guardados', event)">📌 Guardados</div>
+</div>
+
+<div id="providersContainer"></div>
+<div class="no-results" id="noResults">No hay resultados</div>
+
+<div class="navbar">
+<a href="create-event.html">➕</a>
+<a href="search-providers.html">🔎</a>
+<a href="messages.html">💬</a>
+<a href="reports.html">📊</a>
+<a href="profile-organizer.html">👤</a>
+</div>
+
+<script>
+
+// 🔥 DEFINIMOS LOS LINKS CORRECTOS SIEMPRE
+const correctLinks = {
+1:"Providor-A.html",
+2:"Providor-C.html",
+3:"Providor-B.html"
+};
+
+let providers = JSON.parse(localStorage.getItem("providers")) || [
+{ id:1, name:"DJ Marco", category:"DJ Profesional", rating:"★★★★★ 4.9", reviews:129, img:"https://randomuser.me/api/portraits/men/32.jpg", fav:false, saved:false, link:"Providor-A.html"},
+{ id:2, name:"Flores de Luna", category:"Decoración floral", rating:"★★★★☆ 4.5", reviews:87, img:"https://randomuser.me/api/portraits/women/44.jpg", fav:false, saved:false, link:"Providor-C.html"},
+{ id:3, name:"Lens & Light", category:"Fotografía y video", rating:"★★★★★ 4.8", reviews:203, img:"https://randomuser.me/api/portraits/men/55.jpg", fav:false, saved:false, link:"Providor-B.html"},
+{ id:4, name:"Pastelería Deluxe", category:"Pasteles personalizados", rating:"★★★★☆ 4.6", reviews:154, img:"https://randomuser.me/api/portraits/women/65.jpg", fav:false, saved:false, link:null},
+{ id:5, name:"Eventos Premium", category:"Planeación integral", rating:"★★★★★ 5.0", reviews:312, img:"https://randomuser.me/api/portraits/men/12.jpg", fav:false, saved:false, link:null},
+{ id:6, name:"Glow Lighting", category:"Iluminación profesional", rating:"★★★★☆ 4.4", reviews:96, img:"https://randomuser.me/api/portraits/women/22.jpg", fav:false, saved:false, link:null}
+];
+
+// 🔥 FORZAMOS LOS LINKS CORRECTOS SIEMPRE
+providers.forEach(p=>{
+if(correctLinks[p.id]){
+p.link = correctLinks[p.id];
+}
+});
+
+function saveData(){
+localStorage.setItem("providers", JSON.stringify(providers));
+}
+
+function goToProfile(link){
+if(link){
+window.location.href = link;
+}else{
+alert("Este perfil aún no está disponible ✨");
+}
+}
+
+let currentTab = "recomendados";
+
+function renderProviders(){
+const container = document.getElementById("providersContainer");
+const searchValue = document.getElementById("searchInput").value.toLowerCase();
+container.innerHTML = "";
+
+let filtered = providers.filter(p => 
+p.name.toLowerCase().includes(searchValue)
+);
+
+if(currentTab === "favoritos") filtered = filtered.filter(p => p.fav);
+if(currentTab === "guardados") filtered = filtered.filter(p => p.saved);
+
+if(filtered.length === 0){
+document.getElementById("noResults").style.display = "block";
+return;
+}else{
+document.getElementById("noResults").style.display = "none";
+}
+
+filtered.forEach(p=>{
+container.innerHTML += `
+<div class="provider-card">
+<img src="${p.img}">
+<div class="provider-info">
+<h3>${p.name}</h3>
+<p>${p.category}</p>
+<div>
+<span class="stars">${p.rating}</span>
+<span class="reviews">(${p.reviews} reseñas)</span>
+</div>
+</div>
+
+<div class="actions">
+<button class="view-btn" onclick="goToProfile('${p.link}')">
+Ver perfil
+</button>
+<span class="icon-btn heart ${p.fav?'active':''}" onclick="toggleFav(${p.id})">♥</span>
+<div class="bookmark ${p.saved?'active':''}" onclick="toggleSave(${p.id})"></div>
+</div>
+</div>
+`;
+});
+}
+
+function toggleFav(id){
+const provider = providers.find(p=>p.id===id);
+provider.fav = !provider.fav;
+saveData();
+renderProviders();
+}
+
+function toggleSave(id){
+const provider = providers.find(p=>p.id===id);
+provider.saved = !provider.saved;
+saveData();
+renderProviders();
+}
+
+function switchTab(tab, e){
+currentTab = tab;
+document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+e.target.classList.add("active");
+renderProviders();
+}
+
+document.getElementById("searchInput").addEventListener("input", renderProviders);
+
+renderProviders();
+
+</script>
+
+</body>
+</html>

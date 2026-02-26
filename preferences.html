@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preferencias - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:60px 20px;
+text-align:center;
+overflow-x:hidden;
+position:relative;
+}
+
+/* FONDO */
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+z-index:-2;
+}
+
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:
+radial-gradient(circle at 20% 30%, rgba(30,83,110,0.08), transparent 60%),
+radial-gradient(circle at 80% 70%, rgba(93,186,194,0.25), transparent 60%);
+z-index:-1;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+.logo img{
+max-width:200px;
+margin-bottom:40px;
+}
+
+h1{
+font-size:30px;
+margin-bottom:10px;
+}
+
+.subtitle{
+margin-bottom:15px;
+opacity:0.8;
+}
+
+.counter{
+margin-bottom:40px;
+font-size:14px;
+transition:0.3s;
+}
+
+.counter.valid{
+color:#1e8f4d;
+font-weight:700;
+}
+
+.back-button{
+position:fixed;
+top:30px;
+left:40px;
+z-index:9999;
+padding:10px 20px;
+border-radius:50px;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(6px);
+text-decoration:none;
+color:#1A334A;
+font-weight:600;
+transition:0.3s ease;
+}
+
+.back-button:hover{
+background:linear-gradient(135deg,#4a7f9ac5,#1A334A);
+color:white;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:25px;
+margin-top:20px;
+}
+
+.card{
+padding:20px;
+border-radius:25px;
+background:rgba(255,255,255,0.5);
+cursor:pointer;
+transition:0.3s ease;
+border:1px solid rgba(255,255,255,0.4);
+backdrop-filter:blur(8px);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+}
+
+.card img{
+width:70px;
+height:70px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:15px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+
+.card:hover{
+transform:translateY(-6px);
+background:linear-gradient(135deg,#4a7f9ac5,#1A334A);
+color:white;
+box-shadow:0 0 25px rgba(156,193,212,0.6);
+}
+
+.selected{
+background:linear-gradient(135deg,#1A334A,#4a7f9ac5);
+color:white;
+box-shadow:0 0 25px rgba(156,193,212,0.8);
+}
+
+.button{
+margin-top:60px;
+padding:18px 60px;
+border-radius:50px;
+border:none;
+font-size:16px;
+cursor:pointer;
+transition:0.3s ease;
+background:linear-gradient(135deg,#4a7f9ac5,#1A334A);
+color:white;
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+.button:disabled{
+opacity:0.5;
+cursor:not-allowed;
+}
+
+.button:not(:disabled):hover{
+transform:translateY(-3px);
+background:linear-gradient(135deg,#1A334A,#4a7f9ac5);
+}
+
+</style>
+</head>
+
+<body>
+
+<a class="back-button" href="register.html">← Regresar</a>
+
+<div class="container">
+
+<div class="logo">
+<img src="logo-eventify.png" alt="Eventify Logo">
+</div>
+
+<h1>Selecciona tus gustos o preferencias</h1>
+<p class="subtitle">Elige mínimo 3 tipos de eventos que te interesen</p>
+<p class="counter" id="counter">0 seleccionados</p>
+
+<div class="grid">
+
+
+<!-- OPCIONES -->
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?wedding">Bodas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?kids-party">Fiestas infantiles</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?corporate-event">Eventos corporativos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?concert">Conciertos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?birthday-party">Cumpleaños</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?graduation">Graduaciones</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?baby-shower">Baby shower</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?festival">Festivales</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?fashion-show">Desfiles</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?sports-event">Eventos deportivos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?conference">Congresos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?engagement-party">Compromisos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?anniversary-party">Aniversarios</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?music-festival">Festivales musicales</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?launch-event">Lanzamientos de marca</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?networking-event">Networking</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?private-dinner">Cenas privadas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?dj-party">Eventos con DJ</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?charity-event">Eventos benéficos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?exhibition">Exposiciones</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?gala-event">Galas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?workshop">Talleres</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?seminar">Seminarios</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?luxury-event">Eventos de lujo</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?engagement">Pedidas de mano</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?bachelorette-party">Despedidas de soltera</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?bachelor-party">Despedidas de soltero</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?baptism">Bautizos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?communion">Primeras comuniones</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?family-party">Reuniones familiares</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?christmas-party">Posadas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?mexico-independence-day">Fiestas patrias</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?halloween-party">Halloween</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?new-year-party">Año Nuevo</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?theme-party">Fiestas temáticas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?pool-party">Pool parties</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?retro-party">Fiestas retro</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?neon-party">Fiestas neon</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?tropical-party">Fiestas tropicales</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?luxury-party">Fiestas elegantes</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?university-party">Fiestas universitarias</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?corporate-meeting">Conferencias ejecutivas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?business-networking">Networking empresarial</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?product-launch">Presentaciones de producto</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?award-ceremony">Premios empresariales</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?brand-activation">Activaciones de marca</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?expo-event">Expos empresariales</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?startup-event">Lanzamiento de startups</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?technology-event">Eventos tecnológicos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?hackathon">Hackathons</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?press-conference">Ruedas de prensa</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?theater">Obras de teatro</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?standup-comedy">Stand up comedy</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?art-exhibition">Exhibiciones de arte</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?book-event">Firmas de libros</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?movie-premiere">Premieres</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?food-festival">Festivales gastronómicos</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?wine-tasting">Catas de vino</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?fashion-show">Pasarelas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?dance-festival">Festivales de danza</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?craft-fair">Ferias artesanales</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?marathon">Maratones</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?football-tournament">Torneos de fútbol</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?padel">Torneos de pádel</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?golf-tournament">Torneos de golf</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?boxing-event">Eventos de box</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?crossfit">Eventos crossfit</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?yoga-event">Yoga masivo</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?beach-wedding">Bodas destino</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?rooftop-party">Eventos en rooftop</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?vip-event">Eventos VIP</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?gala-dinner">Galas benéficas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?luxury-dinner">Eventos de alta gastronomía</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?princess-party">Fiestas de princesas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?superhero-party">Fiestas de superhéroes</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?school-event">Eventos escolares</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?gender-reveal">Gender reveal</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?dj-party">DJ electrónico</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?live-band">Música en vivo</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?jazz-concert">Eventos de jazz</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?orchestra">Orquestas</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?karaoke-party">Karaoke night</div>
+
+<div class="card"><img src="https://source.unsplash.com/100x100/?eco-event">Eventos sustentables</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?pet-friendly">Eventos pet friendly</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?wellness-retreat">Eventos wellness</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?spiritual-retreat">Retiro espiritual</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?garden-party">Eventos en jardín</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?boho-party">Eventos boho</div>
+<div class="card"><img src="https://source.unsplash.com/100x100/?glam-party">Eventos glam</div>
+
+</div>
+
+<button class="button" id="continueBtn" disabled>
+Continuar
+</button>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+/* 🔒 PROTEGER */
+if(localStorage.getItem("isLoggedIn") !== "true"){
+window.location.href = "login.html";
+return;
+}
+
+const savedUser = JSON.parse(localStorage.getItem("organizerUser"));
+if(!savedUser){
+window.location.href = "register.html";
+return;
+}
+
+if(localStorage.getItem("preferencesCompleted") === "true"){
+window.location.href = "home-organizer.html";
+return;
+}
+
+const cards = document.querySelectorAll(".card");
+const counter = document.getElementById("counter");
+const button = document.getElementById("continueBtn");
+
+cards.forEach(card => {
+card.addEventListener("click", function(){
+this.classList.toggle("selected");
+
+const selectedCount = document.querySelectorAll(".selected").length;
+counter.textContent = selectedCount + " seleccionados";
+
+if(selectedCount >= 3){
+button.disabled = false;
+counter.classList.add("valid");
+}else{
+button.disabled = true;
+counter.classList.remove("valid");
+}
+});
+});
+
+button.addEventListener("click", function(){
+
+const selected = document.querySelectorAll(".selected");
+const preferences = [];
+
+selected.forEach(card=>{
+preferences.push(card.textContent.trim());
+});
+
+localStorage.setItem("organizerPreferences", JSON.stringify(preferences));
+localStorage.setItem("preferencesCompleted", "true");
+
+window.location.href = "home-organizador.html";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>

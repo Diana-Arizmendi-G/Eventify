@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:80px 20px 120px;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+}
+
+/* BOTÓN BURBUJA */
+.back-btn{
+position:absolute;
+top:20px;
+left:20px;
+padding:10px 20px;
+border-radius:40px;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(6px);
+text-decoration:none;
+color:#1A334A;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:linear-gradient(135deg,#4a7f9a,#1A334A);
+color:white;
+}
+
+h1{
+text-align:center;
+margin-bottom:25px;
+}
+
+/* TARJETA PERFIL */
+.profile-card{
+background:white;
+border-radius:25px;
+padding:25px;
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
+display:flex;
+align-items:center;
+gap:20px;
+margin-bottom:25px;
+position:relative;
+}
+
+/* AVATAR */
+.avatar{
+width:100px;
+height:100px;
+border-radius:50%;
+background:#6c9bb3;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:45px;
+color:white;
+overflow:hidden;
+position:relative;
+}
+
+.avatar img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* CAMARITA AL FRENTE */
+.camera-btn{
+position:absolute;
+bottom:6px;
+right:6px;
+background:#5DBAC2;
+border:none;
+border-radius:50%;
+width:32px;
+height:32px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 3px 8px rgba(0,0,0,0.15);
+transition:0.3s;
+}
+
+.camera-btn:hover{
+transform:scale(1.08);
+background:#4aaab2;
+}
+
+/* BOTÓN EDITAR */
+.edit-btn{
+position:absolute;
+top:20px;
+right:20px;
+background:#1A334A;
+color:white;
+border:none;
+border-radius:20px;
+padding:6px 15px;
+cursor:pointer;
+font-family:'Bodoni Moda', serif;
+font-size:13px;
+}
+
+.profile-info h2{
+margin-bottom:5px;
+}
+
+.profile-info span{
+color:#6c9bb3;
+font-size:14px;
+}
+
+/* INFO */
+.info-card{
+background:white;
+padding:18px;
+border-radius:18px;
+margin-bottom:15px;
+box-shadow:0 8px 18px rgba(0,0,0,0.06);
+}
+
+.info-card label{
+display:block;
+font-size:13px;
+color:#6c9bb3;
+margin-bottom:5px;
+}
+
+.info-card input{
+width:100%;
+border:none;
+outline:none;
+font-family:'Bodoni Moda', serif;
+font-size:15px;
+color:#1A334A;
+background:transparent;
+}
+
+/* DESHABILITADO */
+input:disabled{
+color:#8ca0ab;
+}
+
+/* LOGOUT */
+.logout-btn{
+margin-top:25px;
+width:100%;
+padding:15px;
+border-radius:20px;
+border:2px solid #c94c4c;
+background:white;
+color:#c94c4c;
+font-family:'Bodoni Moda', serif;
+cursor:pointer;
+transition:0.3s;
+}
+
+.logout-btn:hover{
+background:#c94c4c;
+color:white;
+}
+
+/* NAVBAR */
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.navbar a{
+text-decoration:none;
+color:#1A334A;
+font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="home-organizador.html" class="back-btn">← Regresar</a>
+
+<h1>Mi Perfil</h1>
+
+<div class="profile-card">
+
+<div class="avatar">
+<span id="initial">U</span>
+<img id="profileImage" style="display:none;">
+<button class="camera-btn" onclick="document.getElementById('fileInput').click()">
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 7h3l2-2h6l2 2h3v11H4z"/>
+  <circle cx="12" cy="13" r="3"/>
+</svg>
+</button><input type="file" id="fileInput" accept="image/*" style="display:none;">
+</div>
+
+<div class="profile-info">
+<h2 id="userName">Organizador</h2>
+<span>Organizador</span>
+</div>
+
+<button class="edit-btn" onclick="toggleEdit()">Editar</button>
+
+</div>
+
+<div class="info-card">
+<label>Nombre</label>
+<input type="text" id="name" disabled>
+</div>
+
+<div class="info-card">
+<label>Correo electrónico</label>
+<input type="email" id="email" disabled>
+</div>
+
+<div class="info-card">
+<label>Teléfono</label>
+<input type="text" id="phone" disabled>
+</div>
+
+<div class="info-card">
+<label>Ciudad</label>
+<input type="text" id="city" disabled>
+</div>
+
+<div class="info-card">
+<label>Tipo de eventos</label>
+<input type="text" id="eventType" disabled>
+</div>
+
+<div class="info-card">
+<label>Presupuesto promedio</label>
+<input type="text" id="budget" disabled>
+</div>
+
+<button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+
+<div class="navbar">
+<a href="create-event.html">➕</a>
+<a href="search-providers.html">🔎</a>
+<a href="messages.html">💬</a>
+<a href="reports.html">📊</a>
+<a href="profile-organizer.html">👤</a>
+</div>
+
+<script>
+
+/* CARGAR USUARIO REGISTRADO */
+let user = JSON.parse(localStorage.getItem("user")) || {};
+
+document.getElementById("name").value = user.name || "";
+document.getElementById("email").value = user.email || "";
+document.getElementById("phone").value = user.phone || "";
+document.getElementById("city").value = user.city || "";
+document.getElementById("eventType").value = user.eventType || "";
+document.getElementById("budget").value = user.budget || "";
+
+document.getElementById("userName").textContent = user.name || "Organizador";
+
+if(user.name){
+document.getElementById("initial").textContent = user.name.charAt(0).toUpperCase();
+}
+
+/* GUARDAR CAMBIOS */
+document.querySelectorAll("input").forEach(input=>{
+input.addEventListener("change",()=>{
+user[input.id] = input.value;
+localStorage.setItem("user", JSON.stringify(user));
+document.getElementById("userName").textContent = user.name;
+document.getElementById("initial").textContent = user.name.charAt(0).toUpperCase();
+});
+});
+
+/* EDITAR */
+let editing = false;
+
+function toggleEdit(){
+editing = !editing;
+document.querySelectorAll("input").forEach(input=>{
+input.disabled = !editing;
+});
+document.querySelector(".edit-btn").textContent = editing ? "Guardar" : "Editar";
+}
+
+/* FOTO PERFIL */
+let savedImage = localStorage.getItem("profileImage");
+
+if(savedImage){
+document.getElementById("profileImage").src = savedImage;
+document.getElementById("profileImage").style.display="block";
+document.getElementById("initial").style.display="none";
+}
+
+document.getElementById("fileInput").addEventListener("change",function(){
+let reader = new FileReader();
+reader.onload = function(e){
+localStorage.setItem("profileImage", e.target.result);
+document.getElementById("profileImage").src = e.target.result;
+document.getElementById("profileImage").style.display="block";
+document.getElementById("initial").style.display="none";
+}
+reader.readAsDataURL(this.files[0]);
+});
+
+/* LOGOUT */
+function logout(){
+localStorage.removeItem("user");
+window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

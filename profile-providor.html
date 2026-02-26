@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Perfil - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:100px 20px 140px;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+}
+
+.back-btn{
+position:absolute;
+top:30px;
+left:20px;
+background:white;
+padding:10px 18px;
+border-radius:30px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+text-decoration:none;
+color:#1A334A;
+font-size:14px;
+}
+
+.profile{text-align:center;}
+
+.profile-container{
+position:relative;
+display:inline-block;
+}
+
+.profile-img{
+width:140px;
+height:140px;
+border-radius:50%;
+object-fit:cover;
+}
+
+/* CAMARA MINIMALISTA */
+.camera-btn{
+position:absolute;
+bottom:0;
+right:0;
+background:white;
+border-radius:50%;
+width:38px;
+height:38px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+transition:0.2s;
+}
+
+.camera-btn:hover{
+transform:scale(1.1);
+}
+
+.camera-btn svg{
+width:18px;
+height:18px;
+stroke:#1A334A;
+}
+
+input[type="file"]{display:none;}
+
+.description{
+margin:25px auto;
+font-size:15px;
+line-height:1.7;
+max-width:500px;
+}
+
+.edit-desc-btn{
+margin-top:10px;
+padding:8px 15px;
+border-radius:20px;
+border:none;
+background:#1A334A;
+color:white;
+cursor:pointer;
+font-size:13px;
+}
+
+.portfolio{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+margin:25px 0;
+}
+
+.portfolio img{
+width:100%;
+border-radius:18px;
+aspect-ratio:3/4;
+object-fit:cover;
+cursor:pointer;
+transition:0.3s;
+}
+
+.portfolio img:hover{
+transform:scale(1.05);
+}
+
+.add-post{
+grid-column:span 3;
+padding:14px;
+border-radius:20px;
+border:2px dashed #1A334A;
+background:transparent;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+.add-post:hover{
+background:#1A334A;
+color:white;
+}
+
+.review{
+background:white;
+padding:15px;
+border-radius:15px;
+margin:12px 0;
+text-align:left;
+font-size:14px;
+}
+
+.review-actions{
+margin-top:8px;
+display:flex;
+gap:15px;
+font-size:14px;
+}
+
+.review-actions span{
+cursor:pointer;
+user-select:none;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:1000;
+}
+
+.modal-content{
+background:white;
+padding:20px;
+border-radius:20px;
+width:90%;
+max-width:400px;
+text-align:center;
+}
+
+textarea{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
+resize:none;
+}
+
+button{
+padding:10px 15px;
+border-radius:20px;
+border:none;
+background:#1A334A;
+color:white;
+cursor:pointer;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="home-provedor.html" class="back-btn">← Regresar</a>
+
+<div class="profile">
+
+<div class="profile-container">
+<img id="profileImage" class="profile-img" src="https://randomuser.me/api/portraits/men/32.jpg">
+
+<div class="camera-btn" onclick="document.getElementById('imageInput').click()">
+<!-- ICONO SVG MINIMALISTA -->
+<svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+<path stroke-linecap="round" stroke-linejoin="round"
+d="M3 7h4l2-2h6l2 2h4v12H3z"/>
+<circle cx="12" cy="13" r="3"/>
+</svg>
+</div>
+
+<input type="file" id="imageInput" accept="image/*">
+</div>
+
+<h2>DJ Marco</h2>
+<div>★★★★★ 4.9 (129 reseñas)</div>
+
+<div class="description" id="descriptionText">
+DJ profesional con más de 8 años de experiencia en bodas y eventos privados.
+</div>
+
+<button class="edit-desc-btn" onclick="openDescModal()">✏ Editar descripción</button>
+
+<h3 style="margin-top:30px;">Portafolio</h3>
+
+<div class="portfolio" id="portfolioContainer"></div>
+
+<!-- INPUT OCULTO PARA SUBIR IMAGEN -->
+<input type="file" id="portfolioInput" accept="image/*" multiple>
+
+<h3 style="margin-top:30px;">Reseñas</h3>
+<div id="reviewsContainer"></div>
+
+</div>
+
+<!-- MODAL EDITAR DESCRIPCIÓN -->
+<div class="modal" id="descModal">
+<div class="modal-content">
+<h3>Editar descripción</h3>
+<textarea id="descInput" rows="4"></textarea>
+<button onclick="saveDescription()">Guardar</button>
+</div>
+</div>
+
+<script>
+
+const profileImage = document.getElementById("profileImage");
+const imageInput = document.getElementById("imageInput");
+const portfolioInput = document.getElementById("portfolioInput");
+const descriptionText = document.getElementById("descriptionText");
+const descModal = document.getElementById("descModal");
+const descInput = document.getElementById("descInput");
+const portfolioContainer = document.getElementById("portfolioContainer");
+const reviewsContainer = document.getElementById("reviewsContainer");
+
+/* CARGAR FOTO */
+if(localStorage.getItem("providerProfileImage")){
+profileImage.src = localStorage.getItem("providerProfileImage");
+}
+
+imageInput.onchange = function(){
+const reader = new FileReader();
+reader.onload = e=>{
+profileImage.src = e.target.result;
+localStorage.setItem("providerProfileImage", e.target.result);
+};
+reader.readAsDataURL(this.files[0]);
+};
+
+/* DESCRIPCIÓN */
+if(localStorage.getItem("providerDescription")){
+descriptionText.innerText = localStorage.getItem("providerDescription");
+}
+
+function openDescModal(){
+descModal.style.display="flex";
+descInput.value = descriptionText.innerText;
+}
+
+function saveDescription(){
+descriptionText.innerText = descInput.value;
+localStorage.setItem("providerDescription", descInput.value);
+descModal.style.display="none";
+}
+
+/* PORTAFOLIO */
+let portfolioImages = JSON.parse(localStorage.getItem("providerPortfolio")) || [
+"https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+"https://images.unsplash.com/photo-1519677100203-a0e668c92439",
+"https://images.unsplash.com/photo-1506157786151-b8491531f063",
+"https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
+"https://images.unsplash.com/photo-1521334884684-d80222895322",
+"https://images.unsplash.com/photo-1505373877841-8d25f7d46678"
+];
+
+function renderPortfolio(){
+portfolioContainer.innerHTML="";
+
+portfolioImages.forEach((img,index)=>{
+portfolioContainer.innerHTML+=`
+<img src="${img}" onclick="removeImage(${index})">
+`;
+});
+
+portfolioContainer.innerHTML+=`
+<button class="add-post" onclick="portfolioInput.click()">➕ Añadir publicación</button>
+`;
+}
+
+portfolioInput.onchange = function(){
+Array.from(this.files).forEach(file=>{
+const reader = new FileReader();
+reader.onload = e=>{
+portfolioImages.push(e.target.result);
+localStorage.setItem("providerPortfolio", JSON.stringify(portfolioImages));
+renderPortfolio();
+};
+reader.readAsDataURL(file);
+});
+};
+
+/* ELIMINAR */
+function removeImage(index){
+if(confirm("¿Eliminar esta publicación?")){
+portfolioImages.splice(index,1);
+localStorage.setItem("providerPortfolio", JSON.stringify(portfolioImages));
+renderPortfolio();
+}
+}
+
+/* RESEÑAS CON LIKES */
+let reviews = JSON.parse(localStorage.getItem("providerReviews")) || [
+{name:"Ana López",stars:5,text:"Increíble ambiente.",likes:0,dislikes:0},
+{name:"Carlos Méndez",stars:4,text:"Muy profesional.",likes:0,dislikes:0},
+{name:"Sofía Torres",stars:5,text:"Súper recomendado.",likes:0,dislikes:0}
+];
+
+function renderReviews(){
+reviewsContainer.innerHTML="";
+reviews.forEach((r,index)=>{
+reviewsContainer.innerHTML+=`
+<div class="review">
+<strong>${r.name}</strong><br>
+${"★".repeat(r.stars)}<br>
+${r.text}
+<div class="review-actions">
+<span onclick="likeReview(${index})">👍 ${r.likes}</span>
+<span onclick="dislikeReview(${index})">👎 ${r.dislikes}</span>
+</div>
+</div>
+`;
+});
+}
+
+function likeReview(i){
+reviews[i].likes++;
+localStorage.setItem("providerReviews", JSON.stringify(reviews));
+renderReviews();
+}
+
+function dislikeReview(i){
+reviews[i].dislikes++;
+localStorage.setItem("providerReviews", JSON.stringify(reviews));
+renderReviews();
+}
+
+renderPortfolio();
+renderReviews();
+
+window.onclick=function(e){
+if(e.target===descModal) descModal.style.display="none";
+}
+</script>
+
+</body>
+</html>

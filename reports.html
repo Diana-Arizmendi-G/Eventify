@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reportes - Eventify</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:70px 20px 120px;
+overflow-x:hidden;
+background:linear-gradient(135deg,#EAF2F5 0%,#8ca0ab 40%,#627782 100%);
+}
+
+/* BOTÓN BURBUJA IGUAL A LOS OTROS */
+.back-btn{
+position:absolute;
+top:20px;
+left:20px;
+padding:10px 20px;
+border-radius:40px;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(6px);
+text-decoration:none;
+color:#1A334A;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:linear-gradient(135deg,#4a7f9a,#1A334A);
+color:white;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+}
+
+.notifications-container{
+max-width:600px;
+margin:auto;
+}
+
+.notification{
+background:white;
+padding:18px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.notification.unread{
+border-left:6px solid #1A334A;
+background:#f3f9fc;
+}
+
+.notification small{
+display:block;
+margin-top:5px;
+color:#4a7f9a;
+font-size:12px;
+}
+
+.notification-actions{
+margin-top:10px;
+display:flex;
+gap:10px;
+}
+
+.small-btn{
+padding:6px 12px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+font-size:12px;
+color:white;
+}
+
+.read-btn{background:#4a7f9a;}
+.delete-btn{background:#c94c4c;}
+
+/* NAVBAR */
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.navbar a{
+text-decoration:none;
+color:#1A334A;
+font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<a href="home-organizador.html" class="back-btn">← Regresar</a>
+
+<h1>Notificaciones</h1>
+
+<div class="notifications-container" id="notificationsContainer"></div>
+
+<div class="navbar">
+<a href="create-event.html">➕</a>
+<a href="search-providers.html">🔎</a>
+<a href="messages.html">💬</a>
+<a href="reports.html">📊</a>
+<a href="profile-organizer.html">👤</a>
+</div>
+
+<script>
+
+let events = JSON.parse(localStorage.getItem("events")) || [];
+let notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+
+/* FUNCIÓN PARA AGREGAR SIN DUPLICAR */
+function addNotification(message){
+if(!notifications.some(n => n.message === message)){
+notifications.push({
+message: message,
+date: new Date().toLocaleString(),
+read:false
+});
+}
+}
+
+function generateEventNotifications(){
+
+events.forEach(event => {
+
+let eventDate = new Date(event.date);
+let now = new Date();
+let diff = eventDate - now;
+let days = Math.floor(diff/(1000*60*60*24));
+
+/* RECORDATORIOS POR FECHA */
+
+if(days > 0){
+
+addNotification(`Faltan ${days} días para tu evento "${event.name}"`);
+
+if(days === 60){
+addNotification(`Tu evento "${event.name}" es en 2 meses. Planeación temprana recomendada.`);
+}
+
+if(days === 45){
+addNotification(`Faltan 45 días para "${event.name}". Agenda reunión con proveedores.`);
+}
+
+if(days === 30){
+addNotification(`Tu evento "${event.name}" es en 30 días. Confirma proveedores.`);
+}
+
+if(days === 21){
+addNotification(`Faltan 3 semanas para "${event.name}". Verifica contrato de proveedores.`);
+}
+
+if(days === 15){
+addNotification(`Faltan 15 días para "${event.name}". Revisa pagos pendientes.`);
+}
+
+if(days === 10){
+addNotification(`Tu evento "${event.name}" es en 10 días. Ajusta logística.`);
+}
+
+if(days === 7){
+addNotification(`Tu evento "${event.name}" es en una semana.`);
+addNotification(`Te falta pagar a un proveedor de "${event.name}".`);
+}
+
+if(days === 5){
+addNotification(`5 días para "${event.name}". Confirma horarios.`);
+}
+
+if(days === 3){
+addNotification(`Tu evento "${event.name}" es en 3 días. Últimos detalles.`);
+}
+
+if(days === 2){
+addNotification(`En 48 horas es "${event.name}". Revisa checklist final.`);
+}
+
+if(days === 1){
+addNotification(`Mañana es tu evento "${event.name}". ¡Todo listo!`);
+}
+
+}
+
+/* EVENTO HOY */
+
+if(days === 0){
+addNotification(`Hoy es tu evento "${event.name}". ¡Mucho éxito!`);
+addNotification(`Tu evento "${event.name}" inició correctamente.`);
+addNotification(`Recuerda evaluar a tus proveedores después del evento.`);
+}
+
+/* EVENTO PASADO */
+
+if(days === -1){
+addNotification(`Tu evento "${event.name}" terminó ayer.`);
+}
+
+if(days < 0){
+addNotification(`Tu evento "${event.name}" finalizó con éxito.`);
+addNotification(`Ya puedes generar el reporte final de "${event.name}".`);
+addNotification(`Califica a tus proveedores de "${event.name}".`);
+}
+
+/* NOTIFICACIONES ADMINISTRATIVAS ALEATORIAS */
+
+if(Math.random() < 0.35){
+addNotification(`Un proveedor confirmó asistencia para "${event.name}".`);
+}
+
+if(Math.random() < 0.25){
+addNotification(`Tu pago a proveedor de "${event.name}" fue exitoso.`);
+}
+
+if(Math.random() < 0.2){
+addNotification(`Se actualizó el contrato de un proveedor para "${event.name}".`);
+}
+
+if(Math.random() < 0.15){
+addNotification(`Un proveedor solicitó anticipo para "${event.name}".`);
+}
+
+if(Math.random() < 0.15){
+addNotification(`Tienes un nuevo mensaje relacionado con "${event.name}".`);
+}
+
+if(Math.random() < 0.1){
+addNotification(`Se agregó un nuevo proveedor sugerido para "${event.name}".`);
+}
+
+if(Math.random() < 0.1){
+addNotification(`El presupuesto de "${event.name}" se está acercando al límite.`);
+}
+
+});
+
+localStorage.setItem("notifications", JSON.stringify(notifications));
+}
+
+function renderNotifications(){
+
+notificationsContainer.innerHTML="";
+
+if(notifications.length === 0){
+notificationsContainer.innerHTML="<p>No tienes notificaciones.</p>";
+return;
+}
+
+/* Más recientes primero */
+notifications.slice().reverse().forEach((n,index)=>{
+
+let realIndex = notifications.length - 1 - index;
+
+notificationsContainer.innerHTML += `
+<div class="notification ${n.read ? '' : 'unread'}">
+<strong>${n.message}</strong>
+<small>${n.date}</small>
+<div class="notification-actions">
+${!n.read ? `<button class="small-btn read-btn" onclick="markAsRead(${realIndex})">Marcar como leída</button>` : ''}
+<button class="small-btn delete-btn" onclick="deleteNotification(${realIndex})">Eliminar</button>
+</div>
+</div>
+`;
+
+});
+
+}
+
+function markAsRead(index){
+notifications[index].read = true;
+localStorage.setItem("notifications", JSON.stringify(notifications));
+renderNotifications();
+}
+
+function deleteNotification(index){
+notifications.splice(index,1);
+localStorage.setItem("notifications", JSON.stringify(notifications));
+renderNotifications();
+}
+
+generateEventNotifications();
+renderNotifications();
+
+</script>
+
+</body>
+</html>

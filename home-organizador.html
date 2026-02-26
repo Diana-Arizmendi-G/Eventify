@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inicio - Eventify</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+min-height:100vh;
+font-family:'Bodoni Moda', serif;
+color:#1A334A;
+padding:60px 40px;
+position:relative;
+overflow-x:hidden;
+}
+
+/* FONDO */
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#EAF2F5 0%,#aabac3 40%,#6e7e87 100%);
+z-index:-2;
+}
+
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at 20% 30%, rgba(30,83,110,0.15), transparent 60%),
+radial-gradient(circle at 80% 70%, rgba(93,186,194,0.35), transparent 60%);
+z-index:-1;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:50px;
+}
+
+.header h1{font-size:30px;}
+
+.logout{
+padding:10px 20px;
+border-radius:40px;
+background:rgba(255,255,255,0.4);
+backdrop-filter:blur(6px);
+cursor:pointer;
+transition:0.3s;
+}
+
+.logout:hover{
+background:linear-gradient(135deg,#4a7f9a,#1A334A);
+color:white;
+}
+
+/* GRID */
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-bottom:50px;
+}
+
+.card{
+padding:30px;
+border-radius:30px;
+background:rgba(255,255,255,0.5);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.4);
+text-align:center;
+}
+
+.card h3{
+font-size:14px;
+opacity:0.7;
+margin-bottom:12px;
+}
+
+.card .number{
+font-size:32px;
+font-weight:600;
+}
+
+/* DESTACADO */
+.highlight{
+padding:45px;
+border-radius:35px;
+background:linear-gradient(135deg,#1A334A,#4a7f9a);
+color:white;
+margin-bottom:50px;
+box-shadow:0 25px 50px rgba(0,0,0,0.25);
+}
+
+.highlight h2{
+margin-bottom:15px;
+font-size:24px;
+}
+
+.highlight button{
+margin-top:20px;
+padding:14px 35px;
+border:none;
+border-radius:40px;
+background:white;
+color:#1A334A;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+.highlight button:hover{
+transform:translateY(-3px);
+}
+
+/* ACCIONES */
+.actions{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:25px;
+margin-bottom:50px;
+}
+
+.action-btn{
+padding:25px;
+border-radius:30px;
+background:rgba(255,255,255,0.5);
+backdrop-filter:blur(8px);
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.action-btn:hover{
+background:linear-gradient(135deg,#4a7f9a,#1A334A);
+color:white;
+}
+
+/* ACTIVIDAD */
+.activity{
+padding:30px;
+border-radius:30px;
+background:rgba(255,255,255,0.5);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.4);
+}
+
+.activity h3{margin-bottom:15px;}
+
+.activity ul{list-style:none;}
+
+.activity li{
+margin-bottom:12px;
+opacity:0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h1 id="welcomeText">Hola ✨</h1>
+<div class="logout" onclick="logout()">Cerrar sesión</div>
+</div>
+
+<div class="stats">
+<div class="card">
+<h3>Próximos eventos</h3>
+<div class="number" id="upcomingCount">0</div>
+</div>
+
+<div class="card">
+<h3>Eventos pasados</h3>
+<div class="number" id="pastCount">7</div>
+</div>
+
+<div class="card">
+<h3>Proveedores activos</h3>
+<div class="number">5</div>
+</div>
+
+<div class="card">
+<h3>Pagos pendientes</h3>
+<div class="number">$12,500</div>
+</div>
+</div>
+
+<div class="highlight" id="highlightSection">
+<!-- Se llena dinámicamente -->
+</div>
+
+<div class="actions">
+<div class="action-btn" onclick="window.location.href='create-event.html'">➕ Crear evento</div>
+<div class="action-btn" onclick="window.location.href='search-providers.html'">🔍 Buscar proveedores</div>
+<div class="action-btn" onclick="window.location.href='messages.html'">💬 Mensajes</div>
+<div class="action-btn" onclick="window.location.href='reports.html'">📊 Reportes</div>
+</div>
+
+<div class="activity">
+<h3>Actividad reciente</h3>
+<ul>
+<li>✔ Pagaste a DJ Carlos</li>
+<li>✔ Catering confirmado</li>
+<li>✔ Nuevo mensaje de fotógrafo</li>
+</ul>
+</div>
+
+<script>
+
+/* 🔒 PROTEGER HOME */
+if(localStorage.getItem("isLoggedIn") !== "true"){
+window.location.href = "login.html";
+}
+
+const user = JSON.parse(localStorage.getItem("organizerUser"));
+if(!user){
+window.location.href = "login.html";
+}
+
+document.getElementById("welcomeText").textContent = "Hola, " + user.name + " ✨";
+
+/* ========================= */
+/* CARGAR EVENTOS           */
+/* ========================= */
+
+let events = JSON.parse(localStorage.getItem("events")) || [];
+
+const today = new Date();
+
+let upcoming = events.filter(e => new Date(e.date) >= today);
+let past = events.filter(e => new Date(e.date) < today);
+
+document.getElementById("upcomingCount").textContent = upcoming.length;
+document.getElementById("pastCount").textContent = past.length;
+
+/* Ordenar próximos por fecha */
+upcoming.sort((a,b)=> new Date(a.date) - new Date(b.date));
+
+const highlight = document.getElementById("highlightSection");
+
+if(upcoming.length > 0){
+
+const nextEvent = upcoming[0];
+
+highlight.innerHTML = `
+<h2>Tu próximo evento 🎉</h2>
+<p><strong>${nextEvent.name}</strong></p>
+<p>${formatDate(nextEvent.date)} · ${nextEvent.location}</p>
+<button onclick="window.location.href='create-event.html'">Ver detalles</button>
+`;
+
+}else{
+
+highlight.innerHTML = `
+<h2>No tienes eventos próximos ✨</h2>
+<p>Crea tu primer evento para comenzar</p>
+<button onclick="window.location.href='create-event.html'">Crear evento</button>
+`;
+
+}
+
+function formatDate(dateString){
+const options = { day: 'numeric', month: 'long', year: 'numeric' };
+return new Date(dateString).toLocaleDateString('es-ES', options);
+}
+
+/* LOGOUT */
+function logout(){
+localStorage.clear();
+window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>
